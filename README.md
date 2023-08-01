@@ -41,6 +41,8 @@ The backend directory is structured as follows:
 
 The PostgreSQL database for this application includes three tables: `users`, `habits`, and `habit_records`.
 
+<img width="722" alt="Screenshot 2023-08-01 at 2 26 38 PM" src="https://github.com/meetg94/habiter/assets/86708110/8e363dc7-30a0-4b52-b0a9-9a063a736d32">
+
 - `users`: Stores user information with the following columns:
   - `id`: a unique identifier for each user (primary key)
   - `name`: the user's name
