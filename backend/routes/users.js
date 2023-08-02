@@ -5,16 +5,22 @@ const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 
-//Schema for user data
-const schema = Joi.object({
+// Schema for user registration
+const registrationSchema = Joi.object({
     name: Joi.string().min(1).required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).required()
+});
+
+// Schema for user login
+const loginSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).required()
 });
 
 router.post('/register', async (req, res) => {
     //Validate user's input
-    const { error } = schema.validate(req.body);
+    const { error } = registrationSchema.validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
@@ -40,7 +46,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     //Validate user's input
-    const { error } = schema.validate(req.body);
+    const { error } = loginSchema.validate(req.body);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }

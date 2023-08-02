@@ -14,7 +14,7 @@ async function createTables() {
         CREATE TABLE IF NOT EXISTS habits (
             id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL,
-            start_data DATE,
+            start_date DATE,
             end_date DATE,
             user_id INTEGER REFERENCES users(id)
         )
