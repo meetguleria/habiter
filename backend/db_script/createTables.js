@@ -26,6 +26,7 @@ async function createTables() {
             date DATE NOT NULL,
             status BOOLEAN NOT NULL,
             habit_id INTEGER REFERENCES habits(id)
+            UNIQUE (habit_id, date)
         )
     `);
 

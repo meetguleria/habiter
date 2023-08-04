@@ -76,6 +76,42 @@ const habitsController = {
             console.error(err);
             res.status(500).send('Server error');
         }
+    },
+
+    updateHabitRecord: async (req, res, next) => {
+        //Parse the habit id and date from request
+        const habitId = req.params.habit_id;
+        const date = new Date(req.params.date);
+
+        //Parse the status from the request body
+        const status = req.body.status;
+
+        try {
+            const habitRecord = await db.one(`
+                INSERT INTO habit_records (habit_id, date, status)
+                VALUES ($1, $2, $3)
+                ON CONFLICT (habit_id, date)
+                DO UPDATE SET status = EXCLUDED.status
+                RETURNING *
+            `, [habitId, date, status]);
+
+            res.json(habitRecord);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
+    },
+
+    getHabitRecords: async (req, res, next) => {
+        const habitId = req.params.habit_id;
+
+        try {
+            const habitRecords = await db.any('SELECT * FROM habit_records WHERE habit_id = $1', [habitId]);
+            res.json(habitRecords);
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
     }
 };
 
