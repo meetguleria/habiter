@@ -10,5 +10,6 @@ router.put('/:id', auth, habitsController.updateHabit);
 router.delete('/:id', auth, habitsController.deleteHabit);
 router.post('/:habit_id/records/:date', auth, habitsController.updateHabitRecord);
 router.get('/:habit_id/records', auth, habitsController.getHabitRecords);
+router.delete('/:habit_id/records/:date', auth, habitsController.deleteHabitRecord);
 
 module.exports = router;

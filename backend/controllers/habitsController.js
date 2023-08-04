@@ -112,6 +112,19 @@ const habitsController = {
             console.error(err);
             res.status(500).send('Server error');
         }
+    },
+
+    deleteHabitRecord: async (req, res, next) => {
+        const habitId = req.params.habit_id;
+        const date = req.params.date;
+
+        try {
+            await db.none('DELETE FROM habit_records WHERE habit_id = $1 AND date = $2', [habitId, date]);
+            res.send('Habit record deleted successfully');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        }
     }
 };
 
