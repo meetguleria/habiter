@@ -1,4 +1,5 @@
 import { SET_USER, LOGOUT_USER } from "./actionTypes";
+import { UserType } from "../Types/userTypes";
 
 export const setUser = (user: UserType) => ({
     type: SET_USER,
