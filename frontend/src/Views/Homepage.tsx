@@ -6,7 +6,7 @@ function Homepage() {
     return (
         <div className="flex flex-col min-h-screen">
             <Header />
-            <MainContent />
+            <MainContent className='flex-grow' />
             <Footer />
         </div>
     )

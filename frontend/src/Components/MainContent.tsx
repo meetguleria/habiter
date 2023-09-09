@@ -1,6 +1,10 @@
-const MainContent: React.FC = () => {
+type MainContentProps = {
+    className?: string;
+}
+
+const MainContent: React.FC<MainContentProps> = ({ className }) => {
     return (
-        <div className="bg-neutral text-primary px-8 py-4">
+        <div className={`bg-neutral text-primary ${className}`}>
             <section className="mb-8">
                 <h2 className="text-2xl font-bold mb-2">What is Habiter?</h2>
                 <p>....</p>
