@@ -1,71 +1,84 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db');
 const bcrypt = require('bcrypt');
-const Joi = require('joi');
 const jwt = require('jsonwebtoken');
+const { User } = require('../models');
+const { body, validationResult } = require('express-validator');
 
-// Schema for user registration
-const registrationSchema = Joi.object({
-    name: Joi.string().min(1).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required()
-});
-
-// Schema for user login
-const loginSchema = Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(8).required()
-});
-
-router.post('/register', async (req, res) => {
-    //Validate user's input
-    const { error } = registrationSchema.validate(req.body);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
+// User Registration Route
+router.post('/register', [
+  // Validate inputs
+  body('email').isEmail().withMessage('Invalid email address'),
+  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    //checking if user exits
-    const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [req.body.email]);
-    if (user) {
-        return res.status(400).send('User with this email already exists')
+    const { name, email, password } = req.body;
+
+    try {
+      // Check if user already exists
+      const existingUser = await User.findOne({ where: { email } });
+      if (existingUser) {
+        return res.status(400).json({ error: 'User with this email already exists' });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Create user
+      const newUser = await User.create({ name, email, password: hashedPassword });
+
+      // Generate JWT token
+      const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+      res.status(201).json({ token });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
+    }
+  }
+]);
+
+// User Login Route
+router.post('/login', [
+  // Validate inputs
+  body('email').isEmail().withMessage('Invalid email address'),
+  body('password').exists().withMessage('Password is required'),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
 
-    //Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const { email, password } = req.body;
 
-    //Insert the new user into the database
-    const newUser = await db.one('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', 
-    [req.body.name, req.body.email, hashedPassword]);
+    try {
+      // Find user by email
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
 
-    //TODO: Create and send a JWT
+      // Compare password
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Invalid email or password' });
+      }
 
-    res.send(newUser);
-});
+      // Generate JWT token
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-router.post('/login', async (req, res) => {
-    //Validate user's input
-    const { error } = loginSchema.validate(req.body);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
+      res.status(200).json({ token });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Server error' });
     }
+  }
+]);
 
-    //check if user with provided email exists
-    const user = await db.oneOrNone('SELECT * FROM users WHERE email = $1', [req.body.email]);
-    if (!user) {
-        return res.status(400).send('Invalid email or password');
-    }
-
-    //Compare the password with the hashed password in the database
-    const validPassword = await bcrypt.compare(req.body.password, user.password);
-    if (!validPassword) {
-        return res.status(400).send('Invalid email or password');
-    }
-
-    //Create a JWT and send it to the client
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h'});
-    res.json({ token });
-});
-
-module.exports = router;   
+module.exports = router;
