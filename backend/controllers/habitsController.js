@@ -1,5 +1,3 @@
-const db = require('../config/db');
-
 const habitsController = {
     createHabit: async (req, res) => {
         //Extract habit data from the request body
