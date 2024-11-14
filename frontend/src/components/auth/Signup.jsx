@@ -48,10 +48,7 @@ function SignUp({ onAuthenticate }) {
       />
       <button onClick={handleSignUp}>Sign Up</button>
       <hr />
-      <GoogleSignInButton onSuccess={handleGoogleSignUp} onError={() => {
-        console.error("Google sign-up failed.");
-        alert("Google sign-up failed. Please try again.");
-      }} />
+      <GoogleSignInButton />
     </div>
   );
 }

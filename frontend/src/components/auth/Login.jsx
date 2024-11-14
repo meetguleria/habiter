@@ -6,7 +6,7 @@ import { login, handleGoogleAuth } from "../../services/authService";
 function Login({ onAuthenticate }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // useNavigate inside the component rendered by a route
 
   // Effect to check if a token is present and redirect if authenticated
   useEffect(() => {
@@ -17,7 +17,7 @@ function Login({ onAuthenticate }) {
     if (token) {
       console.log("Token found. Storing in localStorage and authenticating user.");
       localStorage.setItem("token", token);
-      onAuthenticate();
+      onAuthenticate(token);
       navigate("/dashboard");
 
       // Remove token from URL after processing
@@ -34,8 +34,8 @@ function Login({ onAuthenticate }) {
     if (success) {
       console.log("Login successful.");
       localStorage.setItem("token", token);
-      onAuthenticate();
-      navigate("/dashboard");
+      onAuthenticate(token);
+      navigate("/dashboard"); // Navigate to dashboard after successful login
     } else {
       alert(message);
     }

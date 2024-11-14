@@ -3,7 +3,9 @@
   --text-color: #E0E0E0;
   --primary-color: #3a3a3a;
   --secondary-color: #8E8E8E;
-  --spacing-unit: 8px; /* Base spacing unit for margins, paddings */
+  --highlight-color: #ff9800; /* Adding highlight color for important actions */
+  --spacing-unit: 8px;
+  --box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* Global styles */
@@ -28,11 +30,21 @@ body {
   border-radius: 4px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: var(--box-shadow);
 }
 
 .btn:hover {
+  background-color: var(--highlight-color);
+  transform: scale(1.05);
+}
+
+.btn-secondary {
   background-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--highlight-color);
 }
 
 /* Styling for header */
@@ -42,29 +54,42 @@ body {
   margin: 0 auto;
   text-align: center;
   padding: calc(var(--spacing-unit) * 2) 0;
+  box-shadow: var(--box-shadow);
+  background-color: var(--primary-color);
+  border-radius: 8px;
 }
 
 /* Title styling */
 .title {
-  color: var(--primary-color);
+  color: var(--highlight-color);
   font-weight: bold;
+  font-size: 2rem;
 }
 
 .subtitle {
   color: var(--secondary-color);
+  font-size: 1.2rem;
 }
 
 /* Styling for Dashboard */
 .dashboard {
   max-width: 800px;
-  margin: 0 auto;
+  margin: calc(var(--spacing-unit) * 4) auto;
   text-align: center;
-  padding: calc(var(--spacing-unit) * 2);
+  padding: calc(var(--spacing-unit) * 3);
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.dashboard h1 {
+  color: var(--highlight-color);
+  margin-bottom: calc(var(--spacing-unit) * 2);
 }
 
 /* Styling for Habit List */
 .habit-list {
-  margin-top: calc(var(--spacing-unit) * 3);
+  margin-top: calc(var(--spacing-unit) * 4);
 }
 
 .habit-list ul {
@@ -72,11 +97,43 @@ body {
   padding: 0;
 }
 
-.habit-list li {
-  background-color: var(--primary-color);
-  margin: calc(var(--spacing-unit) * 1) 0;
-  padding: calc(var(--spacing-unit) * 1);
+.habit-card {
+  background-color: var(--secondary-color);
+  margin: calc(var(--spacing-unit) * 2) 0;
+  padding: calc(var(--spacing-unit) * 2);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s;
+}
+
+.habit-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Styling for Habit Form */
+.habit-form {
+  margin: calc(var(--spacing-unit) * 4) auto;
+  padding: calc(var(--spacing-unit) * 4);
+  background: var(--primary-color);
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+}
+
+.habit-form label {
+  display: block;
+  margin: calc(var(--spacing-unit) * 2) 0 calc(var(--spacing-unit) * 1);
+  color: var(--highlight-color);
+  font-weight: bold;
+}
+
+.habit-form input {
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 1.5);
+  margin-bottom: calc(var(--spacing-unit) * 2);
   border-radius: 4px;
+  border: 1px solid var(--text-color);
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 /* Styling for authentication forms */
@@ -87,15 +144,18 @@ body {
   background: var(--primary-color);
   border-radius: 8px;
   text-align: center;
+  box-shadow: var(--box-shadow);
 }
 
 .auth-form input {
   display: block;
   width: 100%;
-  padding: calc(var(--spacing-unit) * 1);
-  margin: calc(var(--spacing-unit) * 1) 0;
+  padding: calc(var(--spacing-unit) * 1.5);
+  margin: calc(var(--spacing-unit) * 2) 0;
   border-radius: 4px;
-  border: none;
+  border: 1px solid var(--text-color);
+  background-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 /* Styling for authentication buttons container */
@@ -104,4 +164,29 @@ body {
   gap: calc(var(--spacing-unit) * 2);
   justify-content: center;
   margin-top: calc(var(--spacing-unit) * 3);
+}
+
+/* Card Container for Habit List */
+.habit-list ul {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 2);
+}
+
+/* Styling for form buttons */
+.habit-form button,
+.auth-form button {
+  padding: calc(var(--spacing-unit) * 1.5);
+  background-color: var(--highlight-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.habit-form button:hover,
+.auth-form button:hover {
+  background-color: var(--text-color);
 }

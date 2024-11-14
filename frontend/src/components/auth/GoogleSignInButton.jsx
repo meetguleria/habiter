@@ -1,9 +1,23 @@
-import React from'react';
+import React from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 
-export default GoogleSignInButton = () => {
+function GoogleSignInButton({ onSuccess, onError }) {
   return (
-    <button className="btn btn-primary">
-      <i className="fab fa-google" /> Sign in with Google
-    </button>
-    );
-  };
+    <GoogleLogin
+      onSuccess={credentialResponse => {
+        console.log("Google sign-in successful. Handling response...");
+        if (onSuccess) {
+          onSuccess(credentialResponse);
+        }
+      }}
+      onError={() => {
+        console.error("Google login failed.");
+        if (onError) {
+          onError();
+        }
+      }}
+    />
+  );
+}
+
+export default GoogleSignInButton;
