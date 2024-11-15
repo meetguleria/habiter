@@ -89,7 +89,7 @@ app.get(
     const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     // Redirect the user to the frontend with the token as a query parameter
-    res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+    res.redirect(`http://localhost:5173/oauth-callback?token=${token}`);
   }
 );
 
