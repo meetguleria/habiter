@@ -1,21 +1,36 @@
-import React from 'react';
+import styled from '@emotion/styled';
+import HabitCard from './HabitCard';
+
+const HabitListContainer = styled.div`
+  margin-top: 16px;
+`;
+
+const HabitListTitle = styled.h2`
+  color: var(--primary-color);
+  text-align: center;
+`;
+
+const HabitCardWrapper = styled.div`
+  margin-bottom: 16px;
+`;
 
 function HabitList({ habits }) {
+  // Ensure habits is always an array
+  const habitsArray = Array.isArray(habits) ? habits : [];
+
   return (
-    <div className="habit-list">
-      <h2>Your Habits</h2>
-      {habits.length === 0 ? (
+    <HabitListContainer>
+      <HabitListTitle>Your Habits</HabitListTitle>
+      {habitsArray.length === 0 ? (
         <p>No habits added yet.</p>
       ) : (
-        <ul>
-          {habits.map((habit, index) => (
-            <li key={index}>
-              <strong>{habit.name}</strong> - Start Date: {habit.startDate}, End Date: {habit.endDate ? habit.endDate : 'N/A'}
-            </li>
-          ))}
-        </ul>
+        habitsArray.map((habit, index) => (
+          <HabitCardWrapper key={habit.id || index}>
+            <HabitCard habit={habit} />
+          </HabitCardWrapper>
+        ))
       )}
-    </div>
+    </HabitListContainer>
   );
 }
 

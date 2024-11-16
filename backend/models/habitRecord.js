@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       // HabitRecord belongs to a habit
       HabitRecord.belongsTo(models.Habit, {
         foreignKey: 'habit_id',
-        as: 'habit',
+        as: 'habit', // Use 'habit' as the alias
         onDelete: 'CASCADE',
       });
     }

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       // User can have multiple habits
       User.hasMany(models.Habit, {
         foreignKey: 'user_id',
-        as: 'habits',
+        as: 'habits', // Use 'habits' as the alias
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   }, {
     sequelize,

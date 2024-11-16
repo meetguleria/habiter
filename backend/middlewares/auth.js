@@ -18,12 +18,17 @@ function auth(req, res, next) {
     const token = authHeader.split(' ')[1];
 
     try {
+        // Verify the token
         const payload = jwt.verify(token, process.env.JWT_SECRET);
         req.user = payload; // Attach user payload to request for further use in routes
-        next();
+        next(); // Token is valid, proceed to the next middleware or route handler
     } catch (err) {
+        if (err.name === 'TokenExpiredError') {
+            console.error('Expired token:', err);
+            return res.status(401).send('Token expired. Please log in again.');
+        }
         console.error('Invalid token:', err);
-        res.status(400).send('Invalid token.');
+        return res.status(401).send('Invalid token.'); // Respond with 401 status code for unauthorized access
     }
 }
 

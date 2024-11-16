@@ -24,7 +24,7 @@ const authController = {
         user = await User.create({
           name: payload.name,
           email,
-          password: null, // No password needed for Google login
+          password: null,
         });
       }
 

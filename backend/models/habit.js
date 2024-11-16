@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       // Habit can have multiple habit records (progress tracking)
       Habit.hasMany(models.HabitRecord, {
         foreignKey: 'habit_id',
-        as: 'records',
+        as: 'records',  // Use 'records' as the alias
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
