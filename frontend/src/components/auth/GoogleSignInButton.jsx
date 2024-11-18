@@ -1,20 +1,25 @@
-import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 
-function GoogleSignInButton({ onSuccess, onError }) {
+function GoogleSignInButton({ onAuthenticate }) {
   return (
     <GoogleLogin
       onSuccess={credentialResponse => {
         console.log("Google sign-in successful. Handling response...");
-        if (onSuccess) {
-          onSuccess(credentialResponse);
+        
+        // Extract token from credentialResponse
+        const token = credentialResponse.credential;
+        if (token) {
+          // Store token in local storage
+          localStorage.setItem("token", token);
+          // Authenticate user in your application context
+          onAuthenticate(token);
+        } else {
+          console.error("No token received from Google sign-in.");
         }
       }}
       onError={() => {
         console.error("Google login failed.");
-        if (onError) {
-          onError();
-        }
+        alert("Google login failed. Please try again.");
       }}
     />
   );

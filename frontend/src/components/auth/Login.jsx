@@ -1,29 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GoogleSignInButton from "../common/GoogleSignInButton";
-import { login, handleGoogleAuth } from "../../services/authService";
+import GoogleSignInButton from "../auth/GoogleSignInButton";
+import { login } from "../../services/authService";
 
 function Login({ onAuthenticate }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate(); // useNavigate inside the component rendered by a route
 
-  // Effect to check if a token is present and redirect if authenticated
   useEffect(() => {
     console.log("Checking URL for OAuth token or localStorage token...");
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token") || localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
     if (token) {
-      console.log("Token found. Storing in localStorage and authenticating user.");
-      localStorage.setItem("token", token);
+      console.log("Token found in localStorage. Authenticating user.");
       onAuthenticate(token);
       navigate("/dashboard");
-
-      // Remove token from URL after processing
-      window.history.replaceState({}, document.title, window.location.pathname);
     } else {
-      console.log("No OAuth token found in URL.");
+      console.log("No token found in localStorage.");
     }
   }, [navigate, onAuthenticate]);
 
@@ -39,10 +33,6 @@ function Login({ onAuthenticate }) {
     } else {
       alert(message);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    handleGoogleAuth("http://localhost:4000/api/users/google");
   };
 
   return (
@@ -62,10 +52,7 @@ function Login({ onAuthenticate }) {
       />
       <button onClick={handleSignIn}>Sign In</button>
       <hr />
-      <GoogleSignInButton onSuccess={handleGoogleLogin} onError={() => {
-        console.error("Google login failed.");
-        alert("Google login failed. Please try again.");
-      }} />
+      <GoogleSignInButton onAuthenticate={onAuthenticate} />
     </div>
   );
 }

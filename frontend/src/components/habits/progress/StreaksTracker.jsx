@@ -1,5 +1,7 @@
-import { StreaksContainer, StreakLine } from './progressStyles';
+import React from'react';
+import { StreaksContainer } from './progressStyles';
 import DateBlock from './DateBlock';
+import StreakLineComponent from './StreakLine';
 
 const StreaksTracker = ({ streakData = [] }) => {
   if (!Array.isArray(streakData)) {
@@ -16,7 +18,7 @@ const StreaksTracker = ({ streakData = [] }) => {
         const dateString = dateISO ? String(new Date(dateISO).getDate()) : '';
 
         return (
-          <>  {/* Using shorthand fragment syntax */}
+          <React.Fragment key={`streak-fragment-${index}`}>
             <DateBlock
               key={`dateblock-${index}`}
               day={dayString}
@@ -29,9 +31,12 @@ const StreaksTracker = ({ streakData = [] }) => {
               }}
             />
             {index < streakData.length - 1 && (
-              <StreakLine color={active ? '#1DB954' : '#FF8C00'} />
+              <StreakLineComponent
+                key={`streakline-${index}`}
+                color={active ? '#1DB954' : '#FF8C00'}
+              />
             )}
-          </>
+          </React.Fragment>
         );
       })}
     </StreaksContainer>

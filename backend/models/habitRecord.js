@@ -3,17 +3,13 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class HabitRecord extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // HabitRecord belongs to a habit
       HabitRecord.belongsTo(models.Habit, {
         foreignKey: 'habit_id',
-        as: 'habit', // Use 'habit' as the alias
+        as: 'habit',
         onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       });
     }
   }
@@ -24,8 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+      type: DataTypes.ENUM('default', 'success', 'failure'),
+      defaultValue: 'default',
+    },
+    clickCount: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
     habit_id: {
       type: DataTypes.INTEGER,

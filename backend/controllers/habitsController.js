@@ -1,5 +1,5 @@
 const habitService = require('../services/habitService');
-const { HabitRecord } = require('../models');
+const { generateDateRange } = require('../utils/dateUtils');
 
 const habitsController = {
     // Create a new habit
@@ -22,6 +22,12 @@ const habitsController = {
 
         try {
             const habitsWithStreakData = await habitService.getUserHabits(userId);
+            // Add date blocks for the frontend (11-day range with today in the middle)
+            const dateBlocks = generateDateRange();
+            habitsWithStreakData.forEach(habit => {
+                habit.dateBlocks = dateBlocks;
+            });
+
             res.status(200).json(habitsWithStreakData);
         } catch (err) {
             console.error('Error fetching habits:', err);
@@ -36,6 +42,11 @@ const habitsController = {
 
         try {
             const habitWithStreakData = await habitService.getUserHabitById(habitId, userId);
+
+            // Add date blocks for the frontend
+            const dateBlocks = generateDateRange();
+            habitWithStreakData.dateBlocks = dateBlocks;
+
             res.status(200).json(habitWithStreakData);
         } catch (err) {
             console.error('Error fetching habit:', err);
@@ -89,12 +100,7 @@ const habitsController = {
         const { date, status } = req.body;
 
         try {
-            const progress = await HabitRecord.create({
-                habit_id: habitId,
-                date: new Date(date),
-                status,
-            });
-
+            const progress = await habitService.addHabitProgress(habitId, date, status);
             res.status(201).json(progress);
         } catch (err) {
             console.error('Error adding habit progress:', err);
@@ -105,20 +111,12 @@ const habitsController = {
     // Update habit progress for a specific date
     updateHabitRecord: async (req, res) => {
         const habitId = req.params.habit_id;
-        const date = new Date(req.params.date);
+        const date = req.params.date;
         const { status } = req.body;
 
         try {
-            const [habitRecord] = await HabitRecord.upsert(
-                {
-                    habit_id: habitId,
-                    date,
-                    status,
-                },
-                { returning: true }
-            );
-
-            res.status(200).json(habitRecord);
+            const updatedRecord = await habitService.updateHabitProgress(habitId, date, status);
+            res.status(200).json(updatedRecord);
         } catch (err) {
             console.error('Error updating habit progress:', err);
             res.status(500).json({ error: 'Server error while updating habit progress.' });
@@ -130,10 +128,7 @@ const habitsController = {
         const habitId = req.params.habit_id;
 
         try {
-            const habitRecords = await HabitRecord.findAll({
-                where: { habit_id: habitId },
-            });
-
+            const habitRecords = await habitService.getHabitRecords(habitId);
             res.status(200).json(habitRecords);
         } catch (err) {
             console.error('Error fetching habit records:', err);
@@ -147,10 +142,7 @@ const habitsController = {
         const date = req.params.date;
 
         try {
-            const deleted = await HabitRecord.destroy({
-                where: { habit_id: habitId, date: new Date(date) },
-            });
-
+            const deleted = await habitService.deleteHabitRecord(habitId, date);
             if (deleted) {
                 res.status(200).json({ message: 'Habit record deleted successfully.' });
             } else {

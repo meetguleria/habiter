@@ -9,7 +9,7 @@ export const DateBlockContainer = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  margin: 0 8px;
+  margin: 0 8px; // Adds space to the left and right for alignment
   border: 3px solid;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -65,10 +65,11 @@ export const StreakBar = styled.div`
 
 // Streak Line Styling
 export const StreakLine = styled.div`
-  flex: 1;
+  width: 40px;  // Set the width to span between date blocks
   height: 4px;
   background: ${({ color }) => color};
   transition: background-color 0.3s ease-in-out;
+  margin: 0 -4px;
 `;
 
 // StreaksTracker Container Styling

@@ -3,23 +3,19 @@ const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class Habit extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // Habit belongs to a user
       Habit.belongsTo(models.User, {
         foreignKey: 'user_id',
         as: 'user',
-        onDelete: 'CASCADE',
+        onDelete: 'CASCADE', // Remove multiple behaviors; keep it consistent
+        onUpdate: 'CASCADE',
       });
 
-      // Habit can have multiple habit records (progress tracking)
+      // Habit has multiple habit records (progress tracking)
       Habit.hasMany(models.HabitRecord, {
         foreignKey: 'habit_id',
-        as: 'records',  // Use 'records' as the alias
+        as: 'records',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });

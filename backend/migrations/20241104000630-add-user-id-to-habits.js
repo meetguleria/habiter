@@ -2,7 +2,6 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Check if column 'user_id' exists before adding it
     const tableDescription = await queryInterface.describeTable('Habits');
     if (!tableDescription.user_id) {
       await queryInterface.addColumn('Habits', 'user_id', {
@@ -19,6 +18,16 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('Habits', 'user_id');
+    try {
+      await queryInterface.removeConstraint('Habits', 'user_id_fk');
+    } catch (err) {
+      console.error('Warning: Could not remove user_id_fk constraint:', err.message);
+    }
+
+    try {
+      await queryInterface.removeColumn('Habits', 'user_id');
+    } catch (err) {
+      console.error('Warning: Could not remove user_id column:', err.message);
+    }
   }
 };
