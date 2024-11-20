@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GoogleSignInButton from "../common/GoogleSignInButton";
-import { signup, handleGoogleAuth } from "../../services/authService";
+import GoogleSignInButton from "../auth/GoogleSignInButton";
+import { signup } from "../../services/authService";
 
 function SignUp({ onAuthenticate }) {
   const [name, setName] = useState("");
@@ -19,10 +19,6 @@ function SignUp({ onAuthenticate }) {
     } else {
       alert(message);
     }
-  };
-
-  const handleGoogleSignUp = () => {
-    handleGoogleAuth("http://localhost:4000/api/users/google");
   };
 
   return (
@@ -48,7 +44,7 @@ function SignUp({ onAuthenticate }) {
       />
       <button onClick={handleSignUp}>Sign Up</button>
       <hr />
-      <GoogleSignInButton />
+      <GoogleSignInButton onAuthenticate={onAuthenticate} />
     </div>
   );
 }

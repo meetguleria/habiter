@@ -120,7 +120,7 @@ function Dashboard() {
 
     while (currentDate <= new Date()) {
       dateBlocks.push({
-        day: format(currentDate, 'EEEE'),
+        day: format(currentDate, 'EEE'),
         dateISO: format(currentDate, 'yyyy-MM-dd'),
         active: false,
         isToday: isToday(currentDate),
@@ -148,8 +148,8 @@ function Dashboard() {
       {/* Render habits along with their progress and streak information */}
       {habits.map((habit) => {
         // Generate date blocks if streakData is empty or not provided
-        const streakData = habit.streakData && habit.streakData.length > 0 
-          ? habit.streakData 
+        const streakData = habit.streakData && habit.streakData.length > 0
+          ? habit.streakData
           : generateDateBlocks(habit.start_date);
 
         return (

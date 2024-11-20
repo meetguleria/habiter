@@ -1,39 +1,42 @@
-import React from'react';
+import React, { useState } from 'react';
 import { StreaksContainer } from './progressStyles';
 import DateBlock from './DateBlock';
 import StreakLineComponent from './StreakLine';
+import { addHabitProgress } from '../../../services/habitService';
 
-const StreaksTracker = ({ streakData = [] }) => {
-  if (!Array.isArray(streakData)) {
-    console.error("Expected streakData to be an array, but got:", streakData);
-    return null; // Render nothing if data is invalid
-  }
+const StreaksTracker = ({ streakData = [], habitId }) => {
+  const [streakStatuses, setStreakStatuses] = useState(streakData.map(item => item.status || 'default'));
+
+  const handleStatusChange = async (index, newStatus, dateISO) => {
+    const updatedStatuses = [...streakStatuses];
+    updatedStatuses[index] = newStatus;
+    setStreakStatuses(updatedStatuses);
+
+    try {
+      // Use habitService to send updated status to the backend
+      await addHabitProgress(habitId, dateISO, newStatus);
+    } catch (error) {
+      console.error('Failed to update habit status', error);
+    }
+  };
 
   return (
     <StreaksContainer>
       {streakData.map((streak, index) => {
-        const { day, dateISO, active, isToday } = streak || {};
-
-        const dayString = day ? String(day) : '';
-        const dateString = dateISO ? String(new Date(dateISO).getDate()) : '';
+        const { day, dateISO, isToday } = streak || {};
 
         return (
-          <React.Fragment key={`streak-fragment-${index}`}>
+          <React.Fragment key={index}>
             <DateBlock
-              key={`dateblock-${index}`}
-              day={dayString}
-              date={dateString}
+              day={String(day)}
+              date={String(new Date(dateISO).getDate())}
               isToday={isToday}
-              isSuccess={active}
-              isFailure={!active && !isToday}
-              onClick={() => {
-                console.log(`Date clicked: ${dateISO}`);
-              }}
+              initialStatus={streakStatuses[index]}
+              onStatusChange={(newStatus) => handleStatusChange(index, newStatus, dateISO)}
             />
             {index < streakData.length - 1 && (
               <StreakLineComponent
-                key={`streakline-${index}`}
-                color={active ? '#1DB954' : '#FF8C00'}
+                status={streakStatuses[index]}
               />
             )}
           </React.Fragment>

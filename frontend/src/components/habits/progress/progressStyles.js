@@ -1,82 +1,83 @@
 import styled from '@emotion/styled';
 
-// DateBlock Styling
 export const DateBlockContainer = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 40px !important;  /* Set the size of the date block */
+  height: 40px !important;  /* Ensure it's a square */
+  flex-shrink: 0; /* Prevent shrinking under flex rules */
+  align-self: center; /* Prevents default "stretch" behavior */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  margin: 0 8px; // Adds space to the left and right for alignment
-  border: 3px solid;
+  margin: 0 4px;  /* Add horizontal margin to space out the date blocks from the streak line */
+  border: 2px solid;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  box-sizing: border-box;
+  overflow: hidden;
 
-  background-color: ${({ isToday, isSuccess, isFailure }) => {
+  background-color: ${({ isToday, status }) => {
     if (isToday) return '#FFD700';
-    if (isSuccess) return '#1DB95433';
-    if (isFailure) return '#FF8C0033';
+    if (status === 'success') return '#1DB95433';
+    if (status === 'failure') return '#FF8C0033';
     return '#80808033';
   }};
-
-  border-color: ${({ isToday, isSuccess, isFailure }) => {
-    if (isSuccess) return '#1DB954';
-    if (isFailure) return '#FF8C00';
-    return isToday ? '#FFD700' : '#E0E0E0';
+  
+  border-color: ${({ status }) => {
+    if (status === 'success') return '#1AAE66';
+    if (status === 'failure') return '#FF9E5E';
+    return '#B0B0B0';
   }};
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-  }
 `;
 
 export const DateLabel = styled.div`
-  font-size: 12px;
+  font-size: 9px;  /* Reduced font size to match the smaller container */
   color: ${({ isToday }) => (isToday ? '#121212' : '#E0E0E0')};
-  font-weight: bold;
-  margin-top: 4px;
-`;
-
-// Progress Bar Styling
-export const ProgressContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-`;
-
-export const ProgressBar = styled.div`
+  text-align: center;
   width: 100%;
-  height: 8px;
-  background-color: var(--secondary-color);
-  border-radius: 4px;
+  white-space: nowrap;
   overflow: hidden;
-  position: relative;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 `;
 
-export const StreakBar = styled.div`
-  width: ${({ progress }) => progress}%;
-  height: 100%;
-  background-color: var(--primary-color);
-  transition: width 0.3s ease-in-out;
-`;
-
-// Streak Line Styling
+// Streak Line Styling Updated to Touch Date Blocks Seamlessly
 export const StreakLine = styled.div`
-  width: 40px;  // Set the width to span between date blocks
-  height: 4px;
-  background: ${({ color }) => color};
+  width: 28px;  /* Slightly reduced width so that combined with negative margins it fits perfectly */
+  height: 2px;  /* Match the border width of the date block */
+  background: ${({ status }) => {
+    if (status === 'success') return '#1AAE66';
+    if (status === 'failure') return '#FF9E5E';
+    return '#B0B0B0';
+  }};
   transition: background-color 0.3s ease-in-out;
-  margin: 0 -4px;
+  margin: 0 -4px;  /* Use negative horizontal margin to make streak line touch the date blocks */
+  align-self: center; /* Ensure the streak line is centered between the date blocks */
+  border-radius: 0; /* Set border-radius to 0 to avoid any rounded ends */
 `;
 
 // StreaksTracker Container Styling
 export const StreaksContainer = styled.div`
   display: flex;
+  align-items: center; /* Align items in the center for both vertical and horizontal positioning */
+  justify-content: center;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Allow date blocks to wrap if necessary */
+`;
+
+// Add ProgressContainer styling here
+export const ProgressContainer = styled.div`
+  display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #E0E0E0;
+  padding: 10px;
+  border-radius: 8px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 20px;
 `;
 

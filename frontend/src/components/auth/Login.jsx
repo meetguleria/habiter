@@ -6,7 +6,7 @@ import { login } from "../../services/authService";
 function Login({ onAuthenticate }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // useNavigate inside the component rendered by a route
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     console.log("Checking URL for OAuth token or localStorage token...");
@@ -29,7 +29,7 @@ function Login({ onAuthenticate }) {
       console.log("Login successful.");
       localStorage.setItem("token", token);
       onAuthenticate(token);
-      navigate("/dashboard"); // Navigate to dashboard after successful login
+      navigate("/dashboard"); 
     } else {
       alert(message);
     }
@@ -52,7 +52,7 @@ function Login({ onAuthenticate }) {
       />
       <button onClick={handleSignIn}>Sign In</button>
       <hr />
-      <GoogleSignInButton onAuthenticate={onAuthenticate} />
+      <GoogleSignInButton /> {/* Uses the new GoogleSignInButton component */}
     </div>
   );
 }
