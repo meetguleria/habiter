@@ -14,8 +14,8 @@ function generateDateRange(totalDays = 11) {
   for (let i = -halfDays; i <= halfDays; i++) {
     const date = moment().add(i, 'days');
     dates.push({
-      day: date.format('dddd'), // Name of the day, e.g., Monday
-      dateISO: date.toISOString(), // Full date in ISO format
+      day: date.format('ddd'),
+      dateISO: date.toISOString(),
       isToday: i === 0,
     });
   }

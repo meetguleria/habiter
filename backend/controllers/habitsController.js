@@ -1,5 +1,4 @@
 const habitService = require('../services/habitService');
-const { generateDateRange } = require('../utils/dateUtils');
 
 const habitsController = {
     // Create a new habit
@@ -22,12 +21,6 @@ const habitsController = {
 
         try {
             const habitsWithStreakData = await habitService.getUserHabits(userId);
-            // Add date blocks for the frontend (11-day range with today in the middle)
-            const dateBlocks = generateDateRange();
-            habitsWithStreakData.forEach(habit => {
-                habit.dateBlocks = dateBlocks;
-            });
-
             res.status(200).json(habitsWithStreakData);
         } catch (err) {
             console.error('Error fetching habits:', err);
@@ -42,11 +35,6 @@ const habitsController = {
 
         try {
             const habitWithStreakData = await habitService.getUserHabitById(habitId, userId);
-
-            // Add date blocks for the frontend
-            const dateBlocks = generateDateRange();
-            habitWithStreakData.dateBlocks = dateBlocks;
-
             res.status(200).json(habitWithStreakData);
         } catch (err) {
             console.error('Error fetching habit:', err);
