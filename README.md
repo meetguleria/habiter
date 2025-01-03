@@ -12,10 +12,76 @@ Habiter is designed to make habit creation and maintenance simpler by giving you
 
 ## Project Structure
 
-The project is divided into two main directories:
+```
+habiter/
+├─ backend/            # Node.js + Express, PostgreSQL, JWT, OAuth
+│  ├─ controllers/
+│  ├─ middlewares/
+│  ├─ models/
+│  ├─ routes/
+│  ├─ services/
+│  ├─ utils/
+│  └─ server.js
+├─ frontend/           # React app (JavaScript)
+│  ├─ src/
+│  ├─ public/
+│  └─ vite.config.js
+└─ README.md
+```
 
-- `backend`: Contains the Node.js and Express server, and connects to a PostgreSQL database.
-- `frontend`: Will contain the React and JavaScript application.
+### Backend Setup
+
+1. Navigate to the backend directory:
+    
+    ```bash
+    cd backend
+    ```
+    
+2. Install dependencies:
+    
+    ```bash
+    npm install
+    ```
+    
+3. Configure environment variables in .env.
+
+4. (Optional) If you use Sequelize migrations:
+    
+    ```bash
+    npx sequelize db:migrate
+    ```
+    
+5. Start the server:
+    
+    ```bash
+    npm start
+    ```
+    
+    The backend will run on `http://localhost:4000` by default (or on the port you set in `.env`).
+
+### Frontend Setup
+
+1. Open a **new terminal** tab in the **`frontend`** directory:
+    
+    ```bash
+    cd ../frontend
+    ```
+    
+2. Install dependencies:
+    
+    ```bash
+    npm install
+    ```
+    
+3. Start the development server:
+    
+    ```bash
+    npm run dev
+    ```
+    
+    The frontend typically runs on `http://localhost:5173`.
+
+You can now access the Habiter frontend in your browser. The frontend will communicate with the backend API for data and authentication.
 
 ## Database Schema
 
@@ -64,34 +130,28 @@ Access to habit endpoints is protected by JWT tokens and user ownership checks t
 Below is a reference for your main endpoints. All authenticated requests require an Authorization: Bearer <JWT_TOKEN> header.
 
 ### User Routes
-  - `POST /api/users/register`
-    Create a new user.
-  - `POST /api/users/login`
-    Login to retrieve a JWT token.
-  - `GET /api/users/google` and GET `/api/users/google/callback`
-    For Google OAuth flows (Passport).
+
+|Endpoint|Method|Description|
+|---|---|---|
+|`/api/users/register`|POST|Register a new user|
+|`/api/users/login`|POST|Login to retrieve JWT token|
+|`/api/users/google`|GET|Google OAuth initiation|
+|`/api/users/google/callback`|GET|OAuth callback, issues JWT|
+
 
 ### Habit Routes
-  - `GET /api/habits`
-    Retrieve all habits for the logged-in user.
-  - `GET /api/habits/:id`
-    Retrieve details for a specific habit (including streak data).
-  - `POST /api/habits`
-    Create a new habit.
-  - `PUT /api/habits/:id`
-    Update a habit’s name or dates.
-  - `DELETE /api/habits/:id`
-    Delete a habit if owned by the user.
 
-### Progress (Habit Records)
-  - `POST /api/habits/:habit_id/progress`
-    Add a new record (with date, status, etc.).
-  - `GET /api/habits/:habit_id/progress`
-    Get all records for a given habit.
-  - `PUT /api/habits/:habit_id/progress/:date`
-    Update a record for a specific date.
-  - `DELETE /api/habits/:habit_id/progress/:date`
-    Delete a record for a specific date.
+| Endpoint                               | Method | Description                               |
+| -------------------------------------- | ------ | ----------------------------------------- |
+| `/api/habits`                          | GET    | Get all habits for the authenticated user |
+| `/api/habits/:id`                      | GET    | Get details for a specific habit          |
+| `/api/habits`                          | POST   | Create a new habit                        |
+| `/api/habits/:id`                      | PUT    | Update a habit’s name or dates            |
+| `/api/habits/:id`                      | DELETE | Delete a habit if owned by the user       |
+| `/api/habits/:habit_id/progress`       | POST   | Add a new record (date, status)           |
+| `/api/habits/:habit_id/progress`       | GET    | Get all records for a habit               |
+| `/api/habits/:habit_id/progress/:date` | PUT    | Update a record on a specific date        |
+| `/api/habits/:habit_id/progress/:date` | DELETE | Delete a record for a specific date       |
 
 ### This documentation will be updated as the project progresses.
 ---
