@@ -1,0 +1,11 @@
+# Ignore node_modules to save space
+**/node_modules
+**/dist
+# Ignore any environment files (if you plan to add them manually)
+*.env
+# Ignore logs
+*.log
+# Ignore local environment settings
+.vscode/
+.idea/
+.DS_Store

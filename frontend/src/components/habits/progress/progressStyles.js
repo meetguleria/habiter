@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
 
 export const DateBlockContainer = styled.div`
-  width: 40px !important;  /* Set the size of the date block */
-  height: 40px !important;  /* Ensure it's a square */
-  flex-shrink: 0; /* Prevent shrinking under flex rules */
-  align-self: center; /* Prevents default "stretch" behavior */
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
+  align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
-  margin: 0 4px;  /* Add horizontal margin to space out the date blocks from the streak line */
+  margin: 0 4px;
   border: 2px solid;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
@@ -23,7 +23,7 @@ export const DateBlockContainer = styled.div`
     if (status === 'failure') return '#FF8C0033';
     return '#80808033';
   }};
-  
+
   border-color: ${({ status }) => {
     if (status === 'success') return '#1AAE66';
     if (status === 'failure') return '#FF9E5E';
