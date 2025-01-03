@@ -42,7 +42,7 @@ The PostgreSQL database for this application includes three tables: `users`, `ha
   - `habit_id`: Foreign key referencing `habits.id`
 
 ## Authentication & Authorization
-# 1. JWT-Based Auth
+ 1. JWT-Based Auth
 
     - `Register`: POST /api/users/register
       - `Body`: { "name": "John", "email": "john@example.com", "password": "secret123" }
@@ -51,7 +51,7 @@ The PostgreSQL database for this application includes three tables: `users`, `ha
       - `Body`: { "email": "john@example.com", "password": "secret123" }
       - `Returns`: A JSON response with a JWT token.
 
-# 2. Google OAuth (via Passport)
+ 2. Google OAuth (via Passport)
 
   - `Initiate`: GET /api/users/google
     - Redirects to Google for sign-in.
@@ -63,7 +63,7 @@ Access to habit endpoints is protected by JWT tokens and user ownership checks t
 ## API Endpoints
 Below is a reference for your main endpoints. All authenticated requests require an Authorization: Bearer <JWT_TOKEN> header.
 
-# User Routes
+### User Routes
   - `POST /api/users/register`
     Create a new user.
   - `POST /api/users/login`
@@ -71,7 +71,7 @@ Below is a reference for your main endpoints. All authenticated requests require
   - `GET /api/users/google` and GET `/api/users/google/callback`
     For Google OAuth flows (Passport).
 
-# Habit Routes
+### Habit Routes
   - `GET /api/habits`
     Retrieve all habits for the logged-in user.
   - `GET /api/habits/:id`
@@ -83,7 +83,7 @@ Below is a reference for your main endpoints. All authenticated requests require
   - `DELETE /api/habits/:id`
     Delete a habit if owned by the user.
 
-# Progress (Habit Records)
+### Progress (Habit Records)
   - `POST /api/habits/:habit_id/progress`
     Add a new record (with date, status, etc.).
   - `GET /api/habits/:habit_id/progress`
@@ -93,5 +93,5 @@ Below is a reference for your main endpoints. All authenticated requests require
   - `DELETE /api/habits/:habit_id/progress/:date`
     Delete a record for a specific date.
 
-This documentation will be updated as the project progresses.
+### This documentation will be updated as the project progresses.
 ---
